@@ -1,0 +1,48 @@
+services:
+  opensips:
+    image: custom-opensips:latest
+    container_name: opensips
+    ports:
+      - "5060:5060/udp"
+      - "5060:5060/tcp"
+      - "8888:8888"
+      - "10000:10000/udp"
+      - "10001:10001/udp"
+      - "10002:10002/udp"
+      - "10003:10003/udp"
+      - "10004:10004/udp"
+      - "10005:10005/udp"
+    volumes:
+      - ./opensips_config:/etc/opensips
+      - ./opensips_tmp:/tmp
+    expose:
+      - "9060/tcp"
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+    restart: unless-stopped
+    entrypoint: /etc/opensips/startup.sh
+
+  mysql:
+    image: mysql
+    container_name: mysql
+    restart: unless-stopped
+    volumes:
+      - ./db_data:/var/lib/mysql
+      - ./docker_entrypoint_mysql:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_USER=opensips
+      - MYSQL_PASSWORD=opensipsrw
+      - MYSQL_ROOT_PASSWORD=root
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: opensips_phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8880:80"
+    environment:
+      PMA_HOST: mysql
+    depends_on:
+      - mysql
