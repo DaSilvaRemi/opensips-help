@@ -1,5 +1,3 @@
-Here's the English translation of the provided text:
-
 # OpenSIPS Load Balancer (SIP) - Dockerized
 
 This project sets up a **SIP load balancer** with [OpenSIPS](https://www.opensips.org/) in a **Docker** environment. It is designed to balance SIP call (INVITE) loads across multiple backend SIP servers, while enabling centralized monitoring and management via a MySQL database.
